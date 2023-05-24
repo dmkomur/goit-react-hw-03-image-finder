@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export class Modal extends React.Component {
   componentDidMount() {
@@ -27,3 +28,7 @@ export class Modal extends React.Component {
     );
   }
 }
+
+Modal.propTypes = {
+  toggleModal: PropTypes.func.isRequired,
+};

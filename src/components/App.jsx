@@ -6,6 +6,7 @@ import { handleFetch } from './utilities/Api';
 import { Button } from './Button/Button';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Modal } from 'components/Modal/Modal';
+import { FidgetSpinner } from 'react-loader-spinner';
 
 export class App extends React.Component {
   state = {
@@ -14,27 +15,47 @@ export class App extends React.Component {
     page: 1,
     totalPage: 1,
     isOpen: false,
+    isLoadding: false,
+    error: false,
     url: '',
     alt: '',
   };
 
   async componentDidUpdate(_, prevState) {
     if (prevState.page !== this.state.page) {
-      const response = await handleFetch(this.state.request, this.state.page);
-      this.setState(prevState => ({
-        pictures: [...prevState.pictures, ...response.hits],
-      }));
+      try {
+        this.toggleSpiner();
+        const response = await handleFetch(this.state.request, this.state.page);
+        this.setState(prevState => ({
+          pictures: [...prevState.pictures, ...response.hits],
+        }));
+      } catch (error) {
+        this.setState({ error });
+      } finally {
+        this.toggleSpiner();
+      }
     }
+
     if (prevState.request !== this.state.request) {
-      const response = await handleFetch(this.state.request, this.state.page);
-      this.setState(prevState => ({
-        pictures: [...response.hits],
-        totalPage: Math.ceil(response.total / 12),
-      }));
+      try {
+        this.toggleSpiner();
+        const response = await handleFetch(this.state.request, this.state.page);
+        this.setState(prevState => ({
+          pictures: [...response.hits],
+          totalPage: Math.ceil(response.total / 12),
+        }));
+      } catch (error) {
+        this.setState({ error });
+      } finally {
+        this.toggleSpiner();
+      }
     }
   }
   toggleModal = (url, alt) => {
     this.setState(prevState => ({ isOpen: !prevState.isOpen, url, alt }));
+  };
+  toggleSpiner = () => {
+    this.setState(prevState => ({ isLoadding: !prevState.isLoadding }));
   };
   onSubmit = request => {
     this.setState({ request, page: 1 });
@@ -50,11 +71,22 @@ export class App extends React.Component {
     return (
       <div className="App">
         <Searchbar onSubmit={this.onSubmit} />
+        {this.state.isLoadding && (
+          <FidgetSpinner
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="dna-loading"
+            wrapperStyle={{}}
+            wrapperClass="dna-wrapper"
+            ballColors={['#ff0000', '#00ff00', '#0000ff']}
+            backgroundColor="#F4442E"
+          />
+        )}
         <ImageGallery>
           <ImageGalleryItem
             data={this.state.pictures}
             toggleModal={this.toggleModal}
-            statusModal={this.state.isOpen}
           />
         </ImageGallery>
 

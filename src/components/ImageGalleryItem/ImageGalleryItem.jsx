@@ -1,4 +1,6 @@
-export const ImageGalleryItem = ({ data, toggleModal, statusModal }) => {
+import PropTypes from 'prop-types';
+
+export const ImageGalleryItem = ({ data, toggleModal }) => {
   return data.map(el => (
     <li
       className="ImageGalleryItem-image"
@@ -8,4 +10,9 @@ export const ImageGalleryItem = ({ data, toggleModal, statusModal }) => {
       <img src={el.webformatURL} alt={el.tags} />
     </li>
   ));
+};
+
+ImageGalleryItem.propTypes = {
+  data: PropTypes.array.isRequired,
+  toggleModal: PropTypes.func.isRequired,
 };

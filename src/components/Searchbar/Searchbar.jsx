@@ -1,4 +1,5 @@
-import { ImSearch } from 'react-icons';
+import { ImSearch } from 'react-icons/im';
+import PropTypes from 'prop-types';
 
 export const Searchbar = ({ onSubmit }) => {
   function hedleSubmit(e) {
@@ -9,10 +10,7 @@ export const Searchbar = ({ onSubmit }) => {
     <header className="Searchbar">
       <form className="SearchForm" onSubmit={e => hedleSubmit(e)}>
         <button type="submit" className="SearchForm-button">
-          <span className="SearchForm-button-label">
-            {/* <ImSearch /> */}
-            Search
-          </span>
+          <ImSearch />
         </button>
 
         <input
@@ -25,4 +23,8 @@ export const Searchbar = ({ onSubmit }) => {
       </form>
     </header>
   );
+};
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };
