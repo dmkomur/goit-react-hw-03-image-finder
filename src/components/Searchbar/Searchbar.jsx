@@ -8,7 +8,7 @@ export const Searchbar = ({ onSubmit }) => {
   }
   return (
     <header className="Searchbar">
-      <form className="SearchForm" onSubmit={e => hedleSubmit(e)}>
+      <form className="SearchForm" onSubmit={hedleSubmit}>
         <button type="submit" className="SearchForm-button">
           <ImSearch />
         </button>

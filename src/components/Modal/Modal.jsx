@@ -31,4 +31,6 @@ export class Modal extends React.Component {
 
 Modal.propTypes = {
   toggleModal: PropTypes.func.isRequired,
+  img: PropTypes.string.isRequired,
+  alt: PropTypes.string,
 };
