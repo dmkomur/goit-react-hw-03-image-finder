@@ -22,28 +22,22 @@ export class App extends React.Component {
   };
 
   async componentDidUpdate(_, prevState) {
-    if (prevState.page !== this.state.page) {
+    if (
+      prevState.page !== this.state.page ||
+      prevState.request !== this.state.request
+    ) {
       try {
         this.toggleSpiner();
         const response = await handleFetch(this.state.request, this.state.page);
-        this.setState(prevState => ({
-          pictures: [...prevState.pictures, ...response.hits],
-        }));
-      } catch (error) {
-        this.setState({ error });
-      } finally {
-        this.toggleSpiner();
-      }
-    }
 
-    if (prevState.request !== this.state.request) {
-      try {
-        this.toggleSpiner();
-        const response = await handleFetch(this.state.request, this.state.page);
-        this.setState(prevState => ({
-          pictures: [...response.hits],
-          totalPage: Math.ceil(response.total / 12),
-        }));
+        prevState.request !== this.state.request
+          ? this.setState(prevState => ({
+              pictures: [...response.hits],
+              totalPage: Math.ceil(response.total / 12),
+            }))
+          : this.setState(prevState => ({
+              pictures: [...prevState.pictures, ...response.hits],
+            }));
       } catch (error) {
         this.setState({ error });
       } finally {
@@ -51,6 +45,7 @@ export class App extends React.Component {
       }
     }
   }
+
   toggleModal = (url, alt) => {
     this.setState(prevState => ({ isOpen: !prevState.isOpen, url, alt }));
   };
